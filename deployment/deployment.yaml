@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: veridra-backend
+  labels:
+    app: veridra-backend
+spec:
+  replicas: 1  # number of Pods
+  selector:
+    matchLabels:
+      app: veridra-backend
+  template:
+    metadata:
+      labels:
+        app: veridra-backend
+    spec:
+      containers:
+      - name: veridra-backend
+        image: veridra-backend:local
+        ports:
+        - containerPort: 8000
+        # (Optional) Example readiness and liveness probes
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8000
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8000
+          initialDelaySeconds: 15
+          periodSeconds: 20
